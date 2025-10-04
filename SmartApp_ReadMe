@@ -1,0 +1,60 @@
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/README.md b/README.md
+index 5706f25cd9c8e1421183297933ab4bf8a3344b95..b368b3ad57101587557d018340119565c084d697 100644
+--- a/README.md
++++ b/README.md
+@@ -1,37 +1,51 @@
+ ![](www/iwn-hackathon-2025-banner.jpg)
+ 
+ > Modify consumer behaviour towards saving water through gamification
+ 
+ The main objective of this hackathon is to develop a practical solution that incentivizes consumer behaviour change to promote water conservation. By leveraging digital metering data, participants are encouraged to explore how turning conservation into a rewarding and engaging game can foster sustained changes in water usage habits. 
+ 
+ The raw data consists of anonymised data from the European [SmartH2O project](https://zenodo.org/records/556725). The files in this repository provided a cleaned version fo  this data, ready for analysis.
+ 
+ Further detail is available in the [Challenge Document](www/iwn-hackathon-2025-challenge.pdf)
+ 
+ You can explore the data in an [interactive application](https://prevos.shinyapps.io/iwn-hackathon-2025/).
+ 
++### Streamlit smart water tracker
++
++This repository now also includes a Streamlit dashboard (`streamlit_app.py`) that lets households search for their smart meter ID,
++compare their daily usage with smart city and town benchmarks, review per-person efficiency scores, and unlock gamified challenges based on metadata and appliance insights.
++
++To launch it locally:
++
++```bash
++pip install -r requirements.txt
++streamlit run streamlit_app.py
++```
++
++The app reads the processed CSV files directly from `clean_data/clean_data.zip`, so no manual extraction is required.
++
+ ## Files
+ - `clean_data`: Cleaned data files (zipped file only on GitHub due to size limitations)
+ - `raw_data`: Original data files from SmartH2O project
+ - `LICENSE`: GPL 3 Free Software license
+ - `README.md`: This file
+ - `etl.R`: R Script to transform the raw data
+ - `shiny-application.R`: Interactive application to explore the data
+ 
+ ### Raw Data
+ The SmartH2O project provides anonymised digital metering datasets from the towns of Terre Di Pedemonte and Valencia in Switserland and Spain. 
+ 
+ Each dataset is stored in its named folder and contains: `anonymizer.zip`. Once decompressed, the archived files are `smarth2o_anonymized_households.csv` and `smarth2o_anonymized_consumptions.csv`
+ 
+ ### Extract, Transfer & Load process
+ The raw data is extracted and transferred with the `etl.R` script to create [tidy data](https://r4ds.had.co.nz/tidy-data.html). The data is stored in three files:
+ 
+ - `appliances.csv`: Count of water appliances for households
+ - `houshold_meta_data.csv`: Meta data related to households
+ - `meter_reads.csv`: Meter reads
+ 
+ Due to GitHub size limitations, these files are provided in a ZIP archive: `clean_data.zip`.
+ 
+ ### `meter_reads.csv`
+ - `smart_meter_id`: The smart meter's unique ID. Starts with either T (Terre Di Pedemonte) or V (Valencia), followed by a three-digit number.
+ - `timestamp`: Timestamp in local time.
+ 
+EOF
+)
